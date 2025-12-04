@@ -1,5 +1,5 @@
 import { useAppStore } from '../store/useAppStore';
-import { Mic, User, Bell, ChevronRight, Sparkles } from 'lucide-react';
+import { Mic, User, Bell, ChevronRight, Sparkles, ClipboardList, Search, FileText, BarChart3, Sprout } from 'lucide-react';
 
 export const Home = () => {
     const { user, setVoiceActive } = useAppStore();
@@ -53,13 +53,13 @@ export const Home = () => {
                     <h3 className="text-lg font-bold text-onSurface mb-4">Quick Actions</h3>
                     <div className="grid grid-cols-2 gap-4">
                         {[
-                            { label: 'Check Eligibility', icon: '📋', color: 'bg-secondaryContainer text-onSecondaryContainer' },
-                            { label: 'Browse Schemes', icon: '🔍', color: 'bg-tertiaryContainer text-onTertiaryContainer' },
-                            { label: 'Upload Docs', icon: '📄', color: 'bg-surfaceVariant text-onSurfaceVariant' },
-                            { label: 'Track Status', icon: '📊', color: 'bg-surfaceVariant text-onSurfaceVariant' },
+                            { label: 'Check Eligibility', icon: <ClipboardList size={24} />, color: 'bg-secondaryContainer text-onSecondaryContainer' },
+                            { label: 'Browse Schemes', icon: <Search size={24} />, color: 'bg-tertiaryContainer text-onTertiaryContainer' },
+                            { label: 'Upload Docs', icon: <FileText size={24} />, color: 'bg-surfaceVariant text-onSurfaceVariant' },
+                            { label: 'Track Status', icon: <BarChart3 size={24} />, color: 'bg-surfaceVariant text-onSurfaceVariant' },
                         ].map((action, i) => (
                             <button key={i} className={`${action.color} p-4 rounded-2xl flex flex-col items-start gap-3 hover:opacity-90 transition-opacity text-left`}>
-                                <span className="text-2xl">{action.icon}</span>
+                                <span className="mb-1">{action.icon}</span>
                                 <span className="font-bold text-sm">{action.label}</span>
                             </button>
                         ))}
@@ -76,8 +76,8 @@ export const Home = () => {
                         {[1, 2].map((_, i) => (
                             <div key={i} className="flex items-center justify-between p-4 hover:bg-surfaceVariant/50 rounded-xl transition-colors cursor-pointer">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 bg-surface rounded-full flex items-center justify-center text-lg shadow-sm">
-                                        🌾
+                                    <div className="w-10 h-10 bg-surface rounded-full flex items-center justify-center text-primary shadow-sm">
+                                        <Sprout size={20} />
                                     </div>
                                     <div>
                                         <h4 className="font-bold text-onSurface text-sm">Kisan Credit Card</h4>

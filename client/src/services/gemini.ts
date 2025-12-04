@@ -9,7 +9,7 @@ Your core behaviors:
 - No long speeches unless summarizing a scheme.
 - Always confirm important details.
 - Never overwhelm users with too many options.
-- Switch instantly to the user’s selected language.
+- CRITICAL: You MUST reply ONLY in the user's selected language. Do not switch to English unless the user explicitly asks.
 - Respond emotionally supportive: helpful, patient, non-judgmental.
 
 Output JSON format:
@@ -31,7 +31,8 @@ export class GeminiService {
 
     constructor() {
         this.genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
-        this.model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        // Use gemini-2.0-flash as it is available for this key
+        this.model = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     }
 
     async generateResponse(transcript: string, context: any, language: string = 'en') {

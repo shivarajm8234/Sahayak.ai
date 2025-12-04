@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
-import { Volume2, Check } from 'lucide-react';
+import { Volume2, Check, Globe } from 'lucide-react';
 
 const languages = [
-    { code: 'en', name: 'English', native: 'English', flag: '🇺🇸', greeting: 'Hello' },
-    { code: 'hi', name: 'Hindi', native: 'हिन्दी', flag: '🇮🇳', greeting: 'नमस्ते' },
-    { code: 'kn', name: 'Kannada', native: 'ಕನ್ನಡ', flag: '🇮🇳', greeting: 'ನಮಸ್ಕಾರ' },
-    { code: 'ta', name: 'Tamil', native: 'தமிழ்', flag: '🇮🇳', greeting: 'வணக்கம்' },
-    { code: 'te', name: 'Telugu', native: 'తెలుగు', flag: '🇮🇳', greeting: 'నమస్కారం' },
-    { code: 'bn', name: 'Bengali', native: 'বাংলা', flag: '🇮🇳', greeting: 'নমস্কার' },
+    { code: 'en', name: 'English', native: 'English', greeting: 'Hello' },
+    { code: 'hi', name: 'Hindi', native: 'हिन्दी', greeting: 'नमस्ते' },
+    { code: 'kn', name: 'Kannada', native: 'ಕನ್ನಡ', greeting: 'ನಮಸ್ಕಾರ' },
+    { code: 'ta', name: 'Tamil', native: 'தமிழ்', greeting: 'வணக்கம்' },
+    { code: 'te', name: 'Telugu', native: 'తెలుగు', greeting: 'నమస్కారం' },
+    { code: 'bn', name: 'Bengali', native: 'বাংলা', greeting: 'নমস্কার' },
 ];
 
 export const Onboarding = () => {
@@ -60,7 +60,9 @@ export const Onboarding = () => {
                                 }`}
                         >
                             <div className="flex items-center gap-5">
-                                <span className="text-4xl filter drop-shadow-sm">{lang.flag}</span>
+                                <div className={`p-3 rounded-full ${selected === lang.code ? 'bg-primary text-onPrimary' : 'bg-surfaceVariant text-onSurfaceVariant'}`}>
+                                    <Globe size={24} />
+                                </div>
                                 <div>
                                     <h3 className={`font-bold text-lg ${selected === lang.code ? 'text-onPrimaryContainer' : 'text-onSurface'}`}>
                                         {lang.name}
