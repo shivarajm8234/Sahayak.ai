@@ -1,7 +1,9 @@
 import { useAppStore } from '../store/useAppStore';
 import { Mic, User, Bell, ChevronRight, Sparkles, ClipboardList, Search, FileText, BarChart3, Sprout } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const Home = () => {
+    const navigate = useNavigate();
     const { user, setVoiceActive } = useAppStore();
 
     return (
@@ -36,7 +38,7 @@ export const Home = () => {
                             <span className="font-medium text-sm">AI Assistant</span>
                         </div>
                         <h2 className="text-2xl font-bold text-onPrimaryContainer mb-4">
-                            Need a loan? <br /> Just ask Vaani.
+                            Need a loan? <br /> Just ask Sahayak AI.
                         </h2>
                         <button
                             onClick={() => setVoiceActive(true)}
@@ -58,7 +60,11 @@ export const Home = () => {
                             { label: 'Upload Docs', icon: <FileText size={24} />, color: 'bg-surfaceVariant text-onSurfaceVariant' },
                             { label: 'Track Status', icon: <BarChart3 size={24} />, color: 'bg-surfaceVariant text-onSurfaceVariant' },
                         ].map((action, i) => (
-                            <button key={i} className={`${action.color} p-4 rounded-2xl flex flex-col items-start gap-3 hover:opacity-90 transition-opacity text-left`}>
+                            <button
+                                key={i}
+                                onClick={() => action.label === 'Browse Schemes' ? navigate('/schemes') : null}
+                                className={`${action.color} p-4 rounded-2xl flex flex-col items-start gap-3 hover:opacity-90 transition-opacity text-left`}
+                            >
                                 <span className="mb-1">{action.icon}</span>
                                 <span className="font-bold text-sm">{action.label}</span>
                             </button>

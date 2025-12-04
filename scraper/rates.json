@@ -1,0 +1,29 @@
+[
+    {
+        "Bank":"SBI (Regex)",
+        "Bank Type":"public",
+        "Loan Category":"Agriculture",
+        "Sub-Category":"General",
+        "Interest Rate":"8.15%, 3.25%, 11.60%",
+        "Details":"Extracted via Regex",
+        "Source":"https:\/\/sbi.co.in\/web\/agri-rural\/agriculture-banking\/crop-loan\/kisan-credit-card"
+    },
+    {
+        "Bank":"SBI (Regex)",
+        "Bank Type":"public",
+        "Loan Category":"Education",
+        "Sub-Category":"General",
+        "Interest Rate":"8.15%, 11.60%, 9.15%",
+        "Details":"Extracted via Regex",
+        "Source":"https:\/\/sbi.bank.in\/web\/interest-rates\/interest-rates\/loan-schemes-interest-rates\/education-loan-scheme"
+    },
+    {
+        "Bank":"SBI (Regex)",
+        "Bank Type":"public",
+        "Loan Category":"Home",
+        "Sub-Category":"General",
+        "Interest Rate":"8.15%, 11.60%, 6.00%",
+        "Details":"Extracted via Regex",
+        "Source":"https:\/\/sbi.bank.in\/web\/interest-rates\/interest-rates\/loan-schemes-interest-rates\/home-loans-interest-rates-current"
+    }
+]

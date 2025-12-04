@@ -4,18 +4,23 @@
     "description": "Scraper service for Sahayak.ai",
     "main": "index.js",
     "scripts": {
-        "start": "node index.js",
-        "scrape": "node src/index.js"
+        "start": "node src/index.js start-server",
+        "scrape": "node src/index.js",
+        "scrape:py": "python3 scraper.py",
+        "upload": "node src/index.js upload"
     },
     "dependencies": {
-        "playwright": "^1.40.0",
-        "firebase-admin": "^12.0.0",
-        "dotenv": "^16.0.0",
         "axios": "^1.6.0",
-        "cheerio": "^1.0.0-rc.12"
+        "cheerio": "^1.0.0-rc.12",
+        "cors": "^2.8.5",
+        "dotenv": "^16.0.0",
+        "express": "^4.18.2",
+        "firebase": "^12.6.0",
+        "firebase-admin": "^12.0.0",
+        "playwright": "^1.40.0"
     },
     "devDependencies": {
-        "typescript": "^5.0.0",
-        "@types/node": "^20.0.0"
+        "@types/node": "^20.0.0",
+        "typescript": "^5.0.0"
     }
 }

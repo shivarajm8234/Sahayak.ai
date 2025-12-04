@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const SYSTEM_PROMPT = `
-You are VaaniLoan Voice Agent — a calm, friendly, multilingual AI loan advisor designed for users with low financial literacy.
+You are Sahayak AI Voice Agent — a calm, friendly, multilingual AI loan advisor designed for users with low financial literacy.
 
 Your core behaviors:
 - Speak slowly, clearly, and in simple language.
@@ -65,6 +65,52 @@ export class GeminiService {
                 actions: ["ask_next_question"],
                 confidence: 0.0
             };
+        }
+    }
+
+    async matchSchemes(userProfile: any, schemes: any[], language: string = 'en') {
+        try {
+            const prompt = `
+            You are an expert financial advisor. Analyze the user profile and the available loan schemes to find the best matches.
+            
+            User Profile:
+            ${JSON.stringify(userProfile)}
+            
+            Available Schemes:
+            ${JSON.stringify(schemes)}
+            
+            Task:
+            1. Filter schemes that match the user's needs (e.g., agriculture, education, home).
+            2. Rank them by relevance (interest rate, eligibility).
+            3. Select the top 3 matches.
+            4. Explain WHY each scheme is a good fit in simple language (translated to ${language}).
+            
+            Output JSON format:
+            {
+                "matches": [
+                    {
+                        "scheme_id": "id_from_scheme_object",
+                        "title": "Scheme Title",
+                        "reason": "Explanation in ${language}",
+                        "match_score": 0.95
+                    }
+                ],
+                "summary": "Overall recommendation summary in ${language}"
+            }
+            `;
+
+            const result = await this.model.generateContent(prompt);
+            const response = await result.response;
+            const text = response.text();
+
+            const jsonMatch = text.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                return JSON.parse(jsonMatch[0]);
+            }
+            throw new Error("Invalid JSON response from Gemini for matching");
+        } catch (error) {
+            console.error("Gemini Matching Error:", error);
+            return { matches: [], summary: "Could not analyze schemes at this time." };
         }
     }
 }
