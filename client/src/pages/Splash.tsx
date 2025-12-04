@@ -9,9 +9,7 @@ export const Splash = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (user) {
-                // If user is already logged in, go to Onboarding (Language Selection)
-                // or Home if language is already set (optional optimization)
-                navigate('/onboarding');
+                navigate('/home');
             } else {
                 navigate('/auth');
             }

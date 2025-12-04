@@ -19,12 +19,6 @@ export const Auth = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        if (user) {
-            navigate('/onboarding');
-        }
-    }, [user, navigate]);
-
     // Email State
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -33,6 +27,12 @@ export const Auth = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [otp, setOtp] = useState('');
     const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+
+    useEffect(() => {
+        if (user) {
+            navigate('/home');
+        }
+    }, [user, navigate]);
 
     const handleEmailAuth = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -44,7 +44,7 @@ export const Auth = () => {
             } else {
                 await createUserWithEmailAndPassword(auth, email, password);
             }
-            navigate('/onboarding');
+            navigate('/home');
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -85,7 +85,7 @@ export const Auth = () => {
         if (!confirmationResult) return;
         try {
             await confirmationResult.confirm(otp);
-            navigate('/onboarding');
+            navigate('/home');
         } catch (err: any) {
             setError(err.message);
         } finally {
