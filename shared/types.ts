@@ -3,7 +3,7 @@ export interface UserProfile {
     email: string | null;
     displayName: string | null;
     photoURL: string | null;
-    preferredLanguage: string; // 'en', 'hi', 'kn', 'ta', 'te', 'bn'
+    preferredLanguage?: string; // 'en', 'hi', 'kn', 'ta', 'te', 'bn'
     location?: {
         lat: number;
         lng: number;

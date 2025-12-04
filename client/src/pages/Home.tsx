@@ -1,76 +1,115 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../lib/firebase';
-import { Mic, GraduationCap, Tractor, LogOut, LogIn } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
+import { LogOut, Mic, User, Bell, ChevronRight, Sparkles } from 'lucide-react';
 
 export const Home = () => {
     const navigate = useNavigate();
-    const setVoiceActive = useAppStore(state => state.setVoiceActive);
-    const user = useAppStore(state => state.user);
+    const { user, setVoiceActive } = useAppStore();
 
     const handleLogout = async () => {
         await signOut(auth);
         navigate('/auth');
     };
 
-    const handleLogin = () => {
-        navigate('/auth');
-    };
-
     return (
-        <div className="min-h-screen bg-gray-50 pb-24 relative">
-            {user ? (
-                <button
-                    onClick={handleLogout}
-                    className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-sm text-gray-500 hover:text-red-500 transition-colors z-10"
-                    title="Logout"
-                >
-                    <LogOut size={20} />
-                </button>
-            ) : (
-                <button
-                    onClick={handleLogin}
-                    className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-sm text-primary hover:text-indigo-700 transition-colors z-10"
-                    title="Login"
-                >
-                    <LogIn size={20} />
-                </button>
-            )}
-
+        <div className="min-h-screen bg-surface pb-24 relative overflow-hidden">
             {/* Header */}
-            <header className="bg-white shadow-sm p-4 sticky top-0 z-0 mb-6">
-                <h1 className="text-xl font-bold text-primary">Sahayak.ai</h1>
-                <p className="text-xs text-gray-500">Your Voice Loan Assistant</p>
-            </header>
-
-            <div className="p-6 flex flex-col gap-6">
-                <header className="mb-2">
-                    <h1 className="text-3xl font-bold text-gray-900">Namaste,</h1>
-                    <p className="text-gray-600">How can I help you today?</p>
-                </header>
-
-                <div className="grid grid-cols-1 gap-6">
-                    <button className="p-6 bg-blue-100 rounded-2xl flex flex-col items-center justify-center gap-4 hover:bg-blue-200 transition-colors">
-                        <GraduationCap size={48} className="text-blue-600" />
-                        <span className="text-xl font-semibold text-blue-900">Education Loan</span>
+            <div className="bg-surface sticky top-0 z-10 px-6 py-4 flex justify-between items-center border-b border-outline/5">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-primaryContainer rounded-full flex items-center justify-center text-onPrimaryContainer font-bold text-lg">
+                        {user?.displayName ? user.displayName[0].toUpperCase() : <User size={20} />}
+                    </div>
+                    <div>
+                        <p className="text-xs text-onSurfaceVariant font-medium">Welcome Back</p>
+                        <h1 className="text-lg font-bold text-onSurface leading-tight">
+                            {user?.displayName || 'Sahayak User'}
+                        </h1>
+                    </div>
+                </div>
+                <div className="flex gap-2">
+                    <button className="p-2 text-onSurfaceVariant hover:bg-surfaceVariant rounded-full">
+                        <Bell size={24} />
                     </button>
-
-                    <button className="p-6 bg-green-100 rounded-2xl flex flex-col items-center justify-center gap-4 hover:bg-green-200 transition-colors">
-                        <Tractor size={48} className="text-green-600" />
-                        <span className="text-xl font-semibold text-green-900">Agriculture Loan</span>
+                    <button onClick={handleLogout} className="p-2 text-onSurfaceVariant hover:bg-errorContainer hover:text-onErrorContainer rounded-full transition-colors">
+                        <LogOut size={24} />
                     </button>
                 </div>
             </div>
 
-            <div className="fixed bottom-6 left-0 right-0 px-6">
+            <div className="p-6 space-y-8">
+                {/* Hero Card */}
+                <div className="bg-primaryContainer rounded-3xl p-6 relative overflow-hidden shadow-sm">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl transform translate-x-10 -translate-y-10"></div>
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-2 mb-2 text-onPrimaryContainer">
+                            <Sparkles size={18} />
+                            <span className="font-medium text-sm">AI Assistant</span>
+                        </div>
+                        <h2 className="text-2xl font-bold text-onPrimaryContainer mb-4">
+                            Need a loan? <br /> Just ask Vaani.
+                        </h2>
+                        <button
+                            onClick={() => setVoiceActive(true)}
+                            className="bg-primary text-onPrimary px-6 py-3 rounded-full font-bold shadow-lg flex items-center gap-2 active:scale-95 transition-transform"
+                        >
+                            <Mic size={20} />
+                            Tap to Speak
+                        </button>
+                    </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div>
+                    <h3 className="text-lg font-bold text-onSurface mb-4">Quick Actions</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                        {[
+                            { label: 'Check Eligibility', icon: '📋', color: 'bg-secondaryContainer text-onSecondaryContainer' },
+                            { label: 'Browse Schemes', icon: '🔍', color: 'bg-tertiaryContainer text-onTertiaryContainer' },
+                            { label: 'Upload Docs', icon: '📄', color: 'bg-surfaceVariant text-onSurfaceVariant' },
+                            { label: 'Track Status', icon: '📊', color: 'bg-surfaceVariant text-onSurfaceVariant' },
+                        ].map((action, i) => (
+                            <button key={i} className={`${action.color} p-4 rounded-2xl flex flex-col items-start gap-3 hover:opacity-90 transition-opacity text-left`}>
+                                <span className="text-2xl">{action.icon}</span>
+                                <span className="font-bold text-sm">{action.label}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Recent Activity */}
+                <div>
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-bold text-onSurface">Recent Activity</h3>
+                        <button className="text-primary text-sm font-bold">View All</button>
+                    </div>
+                    <div className="bg-surfaceVariant/30 rounded-2xl p-1">
+                        {[1, 2].map((_, i) => (
+                            <div key={i} className="flex items-center justify-between p-4 hover:bg-surfaceVariant/50 rounded-xl transition-colors cursor-pointer">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 bg-surface rounded-full flex items-center justify-center text-lg shadow-sm">
+                                        🌾
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-onSurface text-sm">Kisan Credit Card</h4>
+                                        <p className="text-xs text-onSurfaceVariant">Viewed 2 hours ago</p>
+                                    </div>
+                                </div>
+                                <ChevronRight size={20} className="text-outline" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Floating Mic Button (FAB) */}
+            <div className="fixed bottom-6 right-6 z-20">
                 <button
                     onClick={() => setVoiceActive(true)}
-                    className="w-full py-6 bg-primary rounded-full text-white text-xl font-bold shadow-lg flex items-center justify-center gap-3 animate-bounce-slow"
+                    className="w-16 h-16 bg-primary text-onPrimary rounded-2xl shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all animate-bounce-slow"
                 >
                     <Mic size={32} />
-                    Tap to Speak
                 </button>
             </div>
         </div>

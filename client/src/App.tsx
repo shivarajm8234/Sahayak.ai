@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './lib/firebase';
 import { useAppStore } from './store/useAppStore';
@@ -11,27 +11,32 @@ import { Home } from './pages/Home';
 import { VoiceOverlay } from './components/VoiceOverlay';
 
 function App() {
+  const syncUserProfile = useAppStore(state => state.syncUserProfile);
   const setUser = useAppStore(state => state.setUser);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser({
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-          preferredLanguage: 'en', // Default, should fetch from DB
-          createdAt: Date.now()
-        });
-      } else {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      try {
+        if (firebaseUser) {
+          await syncUserProfile(
+            firebaseUser.uid,
+            firebaseUser.email,
+            firebaseUser.displayName,
+            firebaseUser.photoURL
+          );
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Error syncing user:", error);
         setUser(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     });
     return () => unsubscribe();
-  }, [setUser]);
+  }, [syncUserProfile, setUser]);
 
   if (loading) return <Loading />;
 
