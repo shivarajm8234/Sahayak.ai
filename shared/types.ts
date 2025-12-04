@@ -13,6 +13,7 @@ export interface UserProfile {
         userAgent: string;
     };
     createdAt: number;
+    isGuest?: boolean;
 }
 
 export interface LoanScheme {

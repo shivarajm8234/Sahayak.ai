@@ -1,17 +1,8 @@
-import { useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
-import { auth } from '../lib/firebase';
 import { useAppStore } from '../store/useAppStore';
-import { LogOut, Mic, User, Bell, ChevronRight, Sparkles } from 'lucide-react';
+import { Mic, User, Bell, ChevronRight, Sparkles } from 'lucide-react';
 
 export const Home = () => {
-    const navigate = useNavigate();
     const { user, setVoiceActive } = useAppStore();
-
-    const handleLogout = async () => {
-        await signOut(auth);
-        navigate('/auth');
-    };
 
     return (
         <div className="min-h-screen bg-surface pb-24 relative overflow-hidden">
@@ -31,9 +22,6 @@ export const Home = () => {
                 <div className="flex gap-2">
                     <button className="p-2 text-onSurfaceVariant hover:bg-surfaceVariant rounded-full">
                         <Bell size={24} />
-                    </button>
-                    <button onClick={handleLogout} className="p-2 text-onSurfaceVariant hover:bg-errorContainer hover:text-onErrorContainer rounded-full transition-colors">
-                        <LogOut size={24} />
                     </button>
                 </div>
             </div>

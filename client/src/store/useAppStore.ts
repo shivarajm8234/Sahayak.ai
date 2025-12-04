@@ -11,6 +11,7 @@ interface AppState {
     isVoiceActive: boolean;
     setVoiceActive: (active: boolean) => void;
     syncUserProfile: (uid: string, email: string | null, displayName: string | null, photoURL: string | null) => Promise<void>;
+    initializeGuest: () => Promise<void>;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -18,7 +19,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     setLanguage: async (lang) => {
         set({ language: lang });
         const { user } = get();
-        if (user) {
+        if (user && !user.isGuest) {
             try {
                 const userRef = doc(db, 'users', user.uid);
                 await setDoc(userRef, { preferredLanguage: lang }, { merge: true });
@@ -32,6 +33,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     isVoiceActive: false,
     setVoiceActive: (active) => set({ isVoiceActive: active }),
     syncUserProfile: async (uid, email, displayName, photoURL) => {
+        if (uid.startsWith('guest_')) return;
         try {
             const userRef = doc(db, 'users', uid);
             const userSnap = await getDoc(userRef);
@@ -54,5 +56,30 @@ export const useAppStore = create<AppState>((set, get) => ({
         } catch (error) {
             console.error("Error syncing user profile:", error);
         }
+    },
+    initializeGuest: async () => {
+        const { user } = get();
+        if (user) return;
+
+        // Check local storage for existing guest ID
+        let guestId = localStorage.getItem('guest_uid');
+        if (!guestId) {
+            guestId = 'guest_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('guest_uid', guestId);
+        }
+
+        const guestProfile: UserProfile = {
+            uid: guestId,
+            email: null,
+            displayName: 'Guest User',
+            photoURL: null,
+            createdAt: Date.now(),
+            isGuest: true
+        };
+
+        // We don't necessarily need to save guest to Firestore immediately, 
+        // but we can if we want persistence across devices (though that requires auth).
+        // For now, just set in state.
+        set({ user: guestProfile });
     }
 }));

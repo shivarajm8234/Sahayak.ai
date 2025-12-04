@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
-import { auth } from '../lib/firebase';
 import { useAppStore } from '../store/useAppStore';
-import { LogOut, Volume2, Check } from 'lucide-react';
+import { Volume2, Check } from 'lucide-react';
 
 const languages = [
     { code: 'en', name: 'English', native: 'English', flag: '🇺🇸', greeting: 'Hello' },
@@ -15,6 +13,7 @@ const languages = [
 ];
 
 export const Onboarding = () => {
+    console.log("Onboarding: Rendering");
     const navigate = useNavigate();
     const setLanguage = useAppStore(state => state.setLanguage);
     const [playing, setPlaying] = useState<string | null>(null);
@@ -27,11 +26,6 @@ export const Onboarding = () => {
             await setLanguage(code);
             navigate('/home');
         }, 500);
-    };
-
-    const handleLogout = async () => {
-        await signOut(auth);
-        navigate('/auth');
     };
 
     const playGreeting = (e: React.MouseEvent, lang: typeof languages[0]) => {
@@ -47,12 +41,6 @@ export const Onboarding = () => {
 
     return (
         <div className="min-h-screen bg-surface p-6 flex flex-col relative">
-            <button
-                onClick={handleLogout}
-                className="absolute top-6 right-6 p-3 text-onSurfaceVariant hover:text-error transition-colors bg-surfaceVariant/50 rounded-full"
-            >
-                <LogOut size={20} />
-            </button>
 
             <div className="flex-1 flex flex-col justify-center max-w-md mx-auto w-full pt-12">
                 <div className="text-center mb-10">
@@ -87,8 +75,8 @@ export const Onboarding = () => {
                                 <button
                                     onClick={(e) => playGreeting(e, lang)}
                                     className={`p-3 rounded-full transition-colors ${playing === lang.code
-                                            ? 'bg-primary text-onPrimary'
-                                            : 'bg-surfaceVariant text-onSurfaceVariant hover:bg-primary/10'
+                                        ? 'bg-primary text-onPrimary'
+                                        : 'bg-surfaceVariant text-onSurfaceVariant hover:bg-primary/10'
                                         }`}
                                 >
                                     <Volume2 size={20} className={playing === lang.code ? 'animate-pulse' : ''} />

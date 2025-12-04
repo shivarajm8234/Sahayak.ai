@@ -10,16 +10,15 @@ export const Splash = () => {
     useEffect(() => {
         setShow(true);
         const timer = setTimeout(() => {
-            if (user) {
-                if (user.preferredLanguage) {
-                    navigate('/home');
-                } else {
-                    navigate('/onboarding');
-                }
+            console.log("Splash: User state:", user);
+            if (user?.preferredLanguage) {
+                console.log("Splash: Navigating to Home");
+                navigate('/home');
             } else {
-                navigate('/auth');
+                console.log("Splash: Navigating to Onboarding");
+                navigate('/onboarding');
             }
-        }, 2500);
+        }, 3000);
         return () => clearTimeout(timer);
     }, [navigate, user]);
 
@@ -30,15 +29,16 @@ export const Splash = () => {
             <div className="absolute bottom-[-20%] right-[-20%] w-[80%] h-[80%] bg-secondaryContainer rounded-full blur-3xl opacity-50 animate-pulse delay-700"></div>
 
             <div className={`z-10 flex flex-col items-center transition-all duration-1000 transform ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                <div className="w-24 h-24 bg-primary rounded-3xl flex items-center justify-center shadow-lg mb-6 animate-bounce-slow">
-                    <span className="text-4xl font-bold text-onPrimary">S</span>
+                <div className="w-32 h-32 bg-gradient-to-br from-primary to-tertiary rounded-3xl flex items-center justify-center shadow-2xl mb-8 animate-bounce-slow rotate-3">
+                    <span className="text-6xl font-bold text-onPrimary">S</span>
                 </div>
-                <h1 className="text-4xl font-bold text-primary mb-2 tracking-tight">Sahayak.ai</h1>
-                <p className="text-lg text-secondary font-medium">Your Voice. Your Loan.</p>
+                <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-3 tracking-tight">Sahayak.ai</h1>
+                <p className="text-xl text-onSurfaceVariant font-medium tracking-wide">Empowering Rural India</p>
             </div>
 
-            <div className="absolute bottom-12 z-10">
+            <div className="absolute bottom-12 z-10 flex flex-col items-center gap-4">
                 <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-sm text-onSurfaceVariant/70">Loading your assistant...</p>
             </div>
         </div>
     );
