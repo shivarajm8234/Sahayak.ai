@@ -1,5 +1,8 @@
 import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../lib/firebase';
 import { useAppStore } from '../store/useAppStore';
+import { LogOut } from 'lucide-react';
 
 const languages = [
     { code: 'en', name: 'English', native: 'English' },
@@ -19,8 +22,19 @@ export const Onboarding = () => {
         navigate('/home');
     };
 
+    const handleLogout = async () => {
+        await signOut(auth);
+        navigate('/auth');
+    };
+
     return (
-        <div className="p-6 h-screen flex flex-col justify-center bg-gray-50">
+        <div className="p-6 h-screen flex flex-col justify-center bg-gray-50 relative">
+            <button
+                onClick={handleLogout}
+                className="absolute top-6 right-6 p-2 text-gray-500 hover:text-red-500 transition-colors"
+            >
+                <LogOut size={24} />
+            </button>
             <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Select Language / भाषा चुनें</h2>
             <div className="grid gap-4">
                 {languages.map(lang => (

@@ -1,15 +1,23 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppStore } from '../store/useAppStore';
 
 export const Splash = () => {
+    const user = useAppStore(state => state.user);
     const navigate = useNavigate();
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            navigate('/onboarding');
+            if (user) {
+                // If user is already logged in, go to Onboarding (Language Selection)
+                // or Home if language is already set (optional optimization)
+                navigate('/onboarding');
+            } else {
+                navigate('/auth');
+            }
         }, 2000);
         return () => clearTimeout(timer);
-    }, [navigate]);
+    }, [navigate, user]);
 
     return (
         <div className="flex items-center justify-center h-screen bg-primary text-white">
