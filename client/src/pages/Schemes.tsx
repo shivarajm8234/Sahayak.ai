@@ -30,8 +30,9 @@ export const Schemes = () => {
         const fetchInitial = async () => {
             setLoading(true);
             try {
-                const schemesSnap = await getDocs(collection(db, 'schemes'));
-                const schemes = schemesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // const schemesSnap = await getDocs(collection(db, 'schemes'));
+                // const schemes = schemesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // setSchemes(schemes); // Assuming setSchemes exists, otherwise just comment out for now
 
                 // Initial match with empty query if needed, or just show all
                 // For now, let's just show categories
@@ -51,10 +52,15 @@ export const Schemes = () => {
         try {
             let schemes = [];
 
-            if (searchQuery) {
+            // Determine what to scrape for: explicit search query OR selected category label
+            const categoryLabel = selectedCategory ? categories.find(c => c.id === selectedCategory)?.label : '';
+            const activeQuery = searchQuery || categoryLabel;
+
+            if (activeQuery) {
                 // 1. Try real-time scraping first
                 try {
-                    const response = await fetch(`/api/scrape?q=${encodeURIComponent(searchQuery)}`);
+                    console.log(`Scraping for: ${activeQuery}`);
+                    const response = await fetch(`/api/scrape?q=${encodeURIComponent(activeQuery)}`);
                     if (response.ok) {
                         const data = await response.json();
                         // Map API data to scheme format
@@ -75,7 +81,7 @@ export const Schemes = () => {
                 }
             }
 
-            // 2. If no API results or no search query, fetch from Firestore
+            // 2. If no API results, fetch from Firestore
             if (schemes.length === 0) {
                 const schemesSnap = await getDocs(collection(db, 'schemes'));
                 schemes = schemesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));

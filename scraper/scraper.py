@@ -158,9 +158,10 @@ def scrape_image_content(response, url_obj):
     return []
 
 def scrape_html_content(response, url_obj):
+    import sys
     soup = BeautifulSoup(response.content, 'html.parser')
     tables = soup.find_all('table')
-    print(f"Scraping {url_obj['url']} - Status: {response.status_code}, Length: {len(response.content)}, Tables: {len(tables)}")
+    print(f"Scraping {url_obj['url']} - Status: {response.status_code}, Length: {len(response.content)}, Tables: {len(tables)}", file=sys.stderr)
     extracted_data = []
 
     for table in tables:
@@ -168,7 +169,7 @@ def scrape_html_content(response, url_obj):
         if not rows: continue
         
         headers = [th.get_text(strip=True).lower() for th in rows[0].find_all(['th', 'td'])]
-        print(f"Headers: {headers}")
+        print(f"Headers: {headers}", file=sys.stderr)
         rate_col = next((i for i, h in enumerate(headers) if ("interest" in h or "rate" in h) and "rating" not in h), 1)
         if rate_col >= len(headers): rate_col = 1
 
@@ -202,11 +203,11 @@ def scrape_html_content(response, url_obj):
                     "Details": full_row,
                     "Source": url_obj['url']
                 })
-    print(f"Extracted {len(extracted_data)} items from {url_obj['url']}")
+    print(f"Extracted {len(extracted_data)} items from {url_obj['url']}", file=sys.stderr)
     
     # Fallback: If no table data, try regex on whole text
     if not extracted_data:
-        print("No table data found, trying regex fallback...")
+        print("No table data found, trying regex fallback...", file=sys.stderr)
         text_content = soup.get_text()
         rate_matches = re.findall(r"\d+\.\d+\s?%", text_content)
         if rate_matches:
@@ -220,17 +221,18 @@ def scrape_html_content(response, url_obj):
                 "Details": "Extracted via Regex",
                 "Source": url_obj['url']
             })
-            print(f"Extracted {len(extracted_data)} items via regex")
+            print(f"Extracted {len(extracted_data)} items via regex", file=sys.stderr)
 
     return extracted_data
 
 def scrape_site(url_obj):
+    import sys
     url = url_obj['url']
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
     session = get_session()
     
     try:
-        print(f"Requesting {url}...")
+        print(f"Requesting {url}...", file=sys.stderr)
         response = session.get(url, headers=headers, timeout=15, verify=False)
         ctype = response.headers.get('Content-Type', '').lower()
         
@@ -240,11 +242,12 @@ def scrape_site(url_obj):
             return scrape_image_content(response, url_obj)
         return scrape_html_content(response, url_obj)
     except Exception as e:
-        print(f"Error scraping {url}: {e}")
+        print(f"Error scraping {url}: {e}", file=sys.stderr)
         return []
 
 # --- CALLABLE FUNCTION FOR SERVER ---
 def run_scraper(search_query=None):
+    import sys
     # 1. Parse Query for Categories
     category_filters = []
     search_terms = []
@@ -259,7 +262,7 @@ def run_scraper(search_query=None):
     
     # 2. Read URLs (filtered by category if applicable)
     url_list = read_urls_from_file("urls.txt", category_filters if category_filters else None)
-    print(f"Found {len(url_list)} URLs to scrape")
+    print(f"Found {len(url_list)} URLs to scrape", file=sys.stderr)
     all_results = []
     
     # 3. Scrape
